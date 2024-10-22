@@ -1,3 +1,5 @@
-manu:manu:/bin/bash:/home/manu:NJNlBqfDwk8U
 mvnu:mvnu:/bin/bash:/home/mvnu:af32lr77*xxKYGKAYYCgX
-alice::azerty::
+alice:manu:/bin/bash:/home/alice:azerty
+manu:manu:/bin:/hom/:azerty
+izuri:RH:/bin/bash:/home/mvnu:Lt6M4YVSXN*Z
+kiri:RH:/bin/bash:/home/mvnu:gQyIAt@osKl2

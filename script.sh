@@ -9,6 +9,15 @@ if [ ! -f "$user_file" ]; then
     echo "Le fichier $user_file a été créé."
 fi
 
+# Dossier pour les sauvegardes
+BACKUP_DIR="/home/mvnu/backup"  # Modifiez ce chemin selon votre configuration
+
+# Vérifier si le répertoire de sauvegarde existe, sinon le créer
+if [ ! -d "$BACKUP_DIR" ]; then
+    mkdir -p "$BACKUP_DIR" || { echo "Erreur : impossible de créer le répertoire $BACKUP_DIR."; exit 1; }
+    echo "Le répertoire de sauvegarde a été créé : $BACKUP_DIR"
+fi
+
 # Fonction pour vérifier si l'utilisateur existe déjà dans le fichier
 utilisateur_existe() {
     local nom=$1
@@ -39,6 +48,29 @@ modifier_utilisateur() {
 # Fonction pour générer un mot de passe aléatoire de 12 caractères
 generer_mot_de_passe() {
     < /dev/urandom tr -dc 'A-Za-z0-9&!*@' | head -c 12
+}
+
+# Fonction pour configurer les permissions ACL
+configurer_acl() {
+    local repertoire=$1
+    local groupe_rh="RH"
+    local groupe_dir="direction"
+
+    # Vérifier si le répertoire existe
+    if [ ! -d "$repertoire" ]; then
+        echo "Le répertoire $repertoire n'existe pas."
+        return
+    fi
+
+    # Configurer les permissions pour le groupe RH
+    setfacl -m g:$groupe_rh:r "$repertoire"  # Lecture pour le groupe RH
+    setfacl -d -m g:$groupe_rh:r "$repertoire"  # ACL par défaut pour le groupe RH
+
+    # Configurer les permissions pour le groupe direction
+    setfacl -m g:$groupe_dir:rw "$repertoire"  # Lecture et écriture pour le groupe direction
+    setfacl -d -m g:$groupe_dir:rw "$repertoire"  # ACL par défaut pour le groupe direction
+
+    echo "Permissions ACL configurées pour le répertoire $repertoire."
 }
 
 # Demander les informations de l'utilisateur
@@ -105,5 +137,19 @@ else
     echo "$nom:$groupe:$shell:$repertoire:$mot_de_passe" >> "$user_file"
     echo "L'utilisateur $nom a été ajouté dans le fichier $user_file avec le mot de passe : $mot_de_passe."
 
-    # Demander si l'utilisateur souhait
+    # Demander si l'utilisateur souhaite changer le mot de passe
+    read -p "Voulez-vous changer le mot de passe ? (oui/non) : " changer_mot_de_passe
+    if [[ "$changer_mot_de_passe" == "oui" ]]; then
+        read -sp "Entrez le nouveau mot de passe : " nouveau_mot_de_passe
+        echo ""
+        # Mettre à jour le fichier avec le nouveau mot de passe
+        sed -i "\$s/$mot_de_passe/$nouveau_mot_de_passe/" "$user_file"
+        echo "Le mot de passe de l'utilisateur $nom a été changé."
+    fi
+fi
+
+# Configurer les permissions ACL sur le répertoire spécifié
+configurer_acl "$repertoire"
+
+
 
