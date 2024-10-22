@@ -1,0 +1,3 @@
+manu:manu:/bin/bash:/home/manu:NJNlBqfDwk8U
+mvnu:mvnu:/bin/bash:/home/mvnu:af32lr77*xxKYGKAYYCgX
+alice::azerty::
