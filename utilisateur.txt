@@ -1,0 +1,2 @@
+shaman::/bin/bash:/home/shaman:Azerty.12345
+jotaro:JOJO:/bin/bash:/home/jotaro:5L8rHzD2vl*r
