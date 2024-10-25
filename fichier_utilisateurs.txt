@@ -1,0 +1,5 @@
+Shaman;groupe1;/bin/bash;/home/Shaman
+Manu;groupe2;/bin/bash;/home/Manu
+Joepok;groupe2;/bin/bash;/home/Joepok
+Lonny;utilisateurs;/bin/bash;/home/Lonny
+
